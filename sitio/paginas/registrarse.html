@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LISTI - Registrarse</title>
+  <link rel="stylesheet" href="../estilos/style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">
+      <img src="../recursos/logopng.png" alt="Listi Logo">
+      <span>LISTI</span>
+    </div>
+    <nav>
+      <a href="../index.html">Inicio</a>
+      <a href="./ayuda.html">Ayuda</a>
+      <a href="./descargar.html">Descargar</a>
+      <span class="divider"></span>
+      <a href="./registrarse.html">Registrarse</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="registro-content" id="registro">
+      <h1>Regístrate en LISTI</h1>
+      <p>Completa los datos para el registro.</p>
+      <form class="registro-form">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" required>
+
+        <a href="#verificacion" class="download">Registrarse</a>
+      </form>
+    </section>
+
+    <section class="verificacion-content" id="verificacion">
+      <h1>Verifica tu correo electrónico</h1>
+      <p>Hemos enviado un código de verificación a tu email. Por favor ingrésalo para activar tu cuenta.</p>
+      <form class="registro-form">
+        <label for="codigo">Código de verificación:</label>
+        <input type="text" id="codigo" name="codigo" required>
+        <button type="submit" class="download">Verificar</button>
+      </form>
+      <p style="margin-top:15px; font-size:14px;">
+        ¿No recibiste el código? <a href="#">Reenviar código</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="credits">
+    <a href="#">Legal</a>
+    <a href="#">Seguridad y Privacidad</a>
+    <a href="#">Cookies</a>
+    <a href="#">Accesibilidad</a>
+    <button class="lang"><i class="fa-solid fa-globe"></i> Español de Latinoamérica</button>
+  </footer>
+
+
+<script>
+document.querySelector(".registro-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const nombre = document.getElementById("nombre").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre, email, password })
+    });
+
+    const data = await response.json();
+    alert(data.message || data.error);
+  } catch (err) {
+    alert("Error en el servidor.");
+  }
+});
+</script>
+
+
+</body>
+</html>
