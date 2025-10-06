@@ -26,18 +26,18 @@
     <section class="registro-content" id="registro">
       <h1>Regístrate en LISTI</h1>
       <p>Completa los datos para el registro.</p>
-      <form class="registro-form">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-
-         <button type="submit" class="download">Registrarse</button>
-      </form>
+        <form class="registro-form">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" required>
+        
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+        
+          <label for="password">Contraseña:</label>
+          <input type="password" id="password" name="password" required>
+        
+          <button type="submit" class="download">Registrarse</button>
+        </form>
     </section>
 
     <section class="verificacion-content" id="verificacion">
@@ -63,29 +63,44 @@
   </footer>
 
 
+<!-- formulario de verificación -->
 <script>
-document.querySelector(".registro-form").addEventListener("submit", async (e) => {
+const formRegistro = document.querySelector("#registro .registro-form");
+const formVerificacion = document.querySelector("#verificacion .registro-form");
+
+formRegistro.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const nombre = document.getElementById("nombre").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  try {
-    const response = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre, email, password })
-    });
+  const res = await fetch("/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nombre, email, password })
+  });
 
-    const data = await response.json();
-    alert(data.message || data.error);
-  } catch (err) {
-    alert("Error en el servidor.");
-  }
+  const data = await res.json();
+  alert(data.message || data.error);
+});
+
+formVerificacion.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const codigo = document.getElementById("codigo").value;
+
+  const res = await fetch("/api/verificar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, codigo })
+  });
+
+  const data = await res.json();
+  alert(data.message || data.error);
 });
 </script>
-
 
 </body>
 </html>
