@@ -50,7 +50,7 @@ const brevoAPI = new Brevo.TransactionalEmailsApi();
 async function enviarCorreoVerificacion(nombre, email, codigo) {
   try {
     await brevoAPI.sendTransacEmail({
-      sender: { email: "no-reply@listi.com", name: "LISTI" },
+      sender: { email: "oficiallisti@gmail.com", name: "LISTI" },
       to: [{ email, name: nombre }],
       subject: "Código de verificación - LISTI",
       htmlContent: `
@@ -139,5 +139,6 @@ app.post("/api/verificar", async (req, res) => {
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "sitio", "index.html"));
 });
+
 
 app.listen(PORT, () => console.log(`✅ Servidor corriendo en puerto ${PORT}`));
