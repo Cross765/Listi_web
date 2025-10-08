@@ -4,8 +4,8 @@ import cors from "cors";
 import pkg from "pg";
 import crypto from "crypto";
 import path from "path";
-import nodemailer from "nodemailer";
 import { fileURLToPath } from "url";
+import Brevo from "sib-api-v3-sdk";
 
 const { Pool } = pkg;
 const app = express();
@@ -40,17 +40,31 @@ function hashPassword(password, iterations = 600000) {
 }
 
 // =======================
-// ✉️ Configuración Nodemailer
+// ✉️ Configuración Brevo API
 // =======================
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+const brevoClient = Brevo.ApiClient.instance;
+const apiKey = brevoClient.authentications["api-key"];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+const brevoAPI = new Brevo.TransactionalEmailsApi();
+
+async function enviarCorreoVerificacion(nombre, email, codigo) {
+  try {
+    await brevoAPI.sendTransacEmail({
+      sender: { email: "no-reply@listi.com", name: "LISTI" },
+      to: [{ email, name: nombre }],
+      subject: "Código de verificación - LISTI",
+      htmlContent: `
+        <h2>Hola ${nombre},</h2>
+        <p>Tu código de verificación para LISTI es:</p>
+        <h1 style="color:#007bff">${codigo}</h1>
+        <p>Por favor ingrésalo en la página para activar tu cuenta.</p>
+      `
+    });
+    console.log(`✅ Correo de verificación enviado a ${email}`);
+  } catch (error) {
+    console.error("❌ Error al enviar correo con Brevo:", error);
   }
-});
+}
 
 // =======================
 // 📬 Ruta: Registro
@@ -66,7 +80,6 @@ app.post("/api/register", async (req, res) => {
     if (!regexPass.test(password))
       return res.status(400).json({ error: "La contraseña debe tener al menos 8 caracteres, incluyendo letras y números." });
 
-    // Verificar si ya existe usuario
     const existe = await pool.query(
       "SELECT * FROM usuarios WHERE nombre_usuario=$1 OR correo_electronico=$2",
       [nombre, email]
@@ -74,33 +87,19 @@ app.post("/api/register", async (req, res) => {
     if (existe.rows.length > 0)
       return res.status(400).json({ error: "Usuario o correo ya existente." });
 
-    // Hashear contraseña
     const hashedPassword = hashPassword(password);
-
-    // Generar código de verificación
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Insertar usuario
     await pool.query(
       "INSERT INTO usuarios (nombre_usuario, correo_electronico, contraseña, codigo_verificacion, verificado) VALUES ($1, $2, $3, $4, false)",
       [nombre, email, hashedPassword, codigo]
     );
 
-    // Enviar correo con código
-    await transporter.sendMail({
-      from: `"LISTI" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Código de verificación - LISTI",
-      html: `
-        <h2>Hola ${nombre},</h2>
-        <p>Tu código de verificación para LISTI es:</p>
-        <h1 style="color:#007bff">${codigo}</h1>
-        <p>Por favor ingrésalo en la página para activar tu cuenta.</p>
-      `
+    await enviarCorreoVerificacion(nombre, email, codigo);
+
+    res.status(201).json({
+      message: "Usuario registrado. Se envió un código de verificación a tu correo."
     });
-
-    res.status(201).json({ message: "Usuario registrado. Se envió un código de verificación a tu correo." });
-
   } catch (err) {
     console.error("Error en /api/register:", err);
     res.status(500).json({ error: "Error en el servidor." });
@@ -122,7 +121,6 @@ app.post("/api/verificar", async (req, res) => {
     if (result.rows.length === 0)
       return res.status(400).json({ error: "Código o correo incorrecto." });
 
-    // Marcar como verificado
     await pool.query(
       "UPDATE usuarios SET verificado=true, codigo_verificacion=NULL WHERE correo_electronico=$1",
       [email]
