@@ -49,7 +49,7 @@
         <button type="submit" class="download">Verificar</button>
       </form>
       <p style="margin-top:15px; font-size:14px;">
-        ¿No recibiste el código? <a href="#">Reenviar código</a>
+        ¿No recibiste el código? <a href="#" id="reenviarCodigo">Reenviar código</a>
       </p>
     </section>
   </main>
@@ -100,6 +100,23 @@ formVerificacion.addEventListener("submit", async (e) => {
   const data = await res.json();
   alert(data.message || data.error);
 });
+
+document.getElementById("reenviarCodigo").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  if (!email) return alert("Por favor, ingresa tu email en el formulario de registro primero.");
+
+  const res = await fetch("/api/reenviar-codigo", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  });
+
+  const data = await res.json();
+  alert(data.message || data.error);
+});
+
 </script>
 
 </body>
