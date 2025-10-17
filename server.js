@@ -133,6 +133,40 @@ app.post("/api/verificar", async (req, res) => {
   }
 });
 
+// Ruta: Reenviar código
+app.post("/api/reenviar-codigo", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const result = await pool.query(
+      "SELECT nombre_usuario, verificado FROM usuarios WHERE correo_electronico=$1",
+      [email]
+    );
+
+    if (result.rows.length === 0)
+      return res.status(404).json({ error: "No existe una cuenta con ese correo." });
+
+    if (result.rows[0].verificado)
+      return res.status(400).json({ error: "La cuenta ya fue verificada." });
+
+    const nombre = result.rows[0].nombre_usuario;
+    const nuevoCodigo = Math.floor(100000 + Math.random() * 900000).toString();
+
+    await pool.query(
+      "UPDATE usuarios SET codigo_verificacion=$1 WHERE correo_electronico=$2",
+      [nuevoCodigo, email]
+    );
+
+    await enviarCorreoVerificacion(nombre, email, nuevoCodigo);
+
+    res.json({ message: "Se ha reenviado un nuevo código de verificación a tu correo." });
+  } catch (err) {
+    console.error("Error en /api/reenviar-codigo:", err);
+    res.status(500).json({ error: "Error en el servidor." });
+  }
+});
+
+
 // =======================
 // 🌐 Servir Frontend
 // =======================
