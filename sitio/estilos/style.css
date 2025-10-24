@@ -449,6 +449,307 @@ body {
   color: #333;
 }
 
+.construccion-banner {
+  color:#fff;
+}
+
+/* ------------------ SECCIÓN NOSOTROS / HISTORIA ------------------ */
+.nosotros {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 50px 30px;
+  background: linear-gradient(to bottom right, #f3e8ff, #ece4f9);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  color: #4c1d95;
+  line-height: 1.8;
+}
+
+.nosotros h2 {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  color: #6d28d9;
+}
+
+.nosotros p {
+  font-size: 1rem;
+  text-align: justify;
+}
+
+.nosotros strong {
+  color: #7c3aed;
+}
+
+/* Imagen con efecto */
+.imagenrandom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.imagenrandom img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.imagenrandom span {
+  position: absolute;
+  bottom: 15px;
+  right: 25px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ------------------- BANNER CON FONDO ------------------- */
+.banner-fondo {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  background-image: url("../recursos/transparente.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #1e1e1e;
+  padding: 80px 20px;
+}
+
+.banner-fondo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.80); /* suaviza el fondo */
+}
+
+.banner-texto {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+
+.banner-texto h1 {
+  font-size: 2.5rem;
+  color: #4c1d95;
+  margin-bottom: 20px;
+}
+
+.banner-texto p {
+  font-size: 1.1rem;
+  color: #4b5563;
+  margin-bottom: 30px;
+}
+
+.btn-descargar {
+  background-color: #7c3aed;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-descargar:hover {
+  background-color: #5b21b6;
+}
+
+/* ------------------- RESPONSIVE ------------------- */
+@media (max-width: 768px) {
+  .banner-fondo {
+    padding: 60px 15px;
+    background-position: center;
+  }
+
+  .banner-texto h1 {
+    font-size: 1.8rem;
+  }
+
+  .banner-texto p {
+    font-size: 1rem;
+  }
+}
+
+.link-registrarse {
+  color: #ffffff; /* violeta de LISTI */
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.link-registrarse:hover {
+  color: #5b21b6;
+  text-shadow: 0 0 5px rgba(124, 58, 237, 0.5);
+}
+
+/* ---------------- EQUIPO ---------------- */
+.equipo {
+  background-color: #7c3aed; /* fondo oscuro */
+  color: #ffffff; /* texto claro */
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.equipo h2 {
+  font-size: 2rem;
+  color: #c4b5fd;
+  margin-bottom: 50px;
+}
+
+.tarjetas-equipo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.tarjeta {
+  background-color: #7c3aed;
+  border-radius: 20px;
+  padding: 30px 25px;
+  width: 280px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.foto-equipo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 3px solid #7c3aed;
+}
+
+.tarjeta h3 {
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+.rol {
+  font-size: 0.9rem;
+  color: #a78bfa;
+  margin-bottom: 15px;
+}
+
+.tarjeta p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #e5e7eb;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 768px) {
+  .tarjetas-equipo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tarjeta {
+    width: 90%;
+    max-width: 350px;
+  }
+}
+
+
+/* ---------------- FOOTER SOCIAL ---------------- */
+.footer-social {
+  background-color: #7c3aed; 
+  padding: 30px 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.social-icons a {
+  color: #b0c4de; /* celeste suave */
+  font-size: 26px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #7c3aed; /* violeta de LISTI */
+  transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .social-icons {
+    gap: 18px;
+  }
+
+  .social-icons a {
+    font-size: 22px;
+  }
+}
+
+/* ------------------ RESPONSIVE ------------------ */
+@media (max-width: 768px) {
+  .nosotros {
+    padding: 35px 20px;
+  }
+
+  .nosotros h2 {
+    font-size: 1.8rem;
+  }
+
+  .nosotros p {
+    font-size: 0.95rem;
+  }
+
+  .imagenrandom img {
+    max-width: 90%;
+  }
+
+  .imagenrandom span {
+    font-size: 1.4rem;
+    right: 15px;
+    bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nosotros {
+    margin: 40px 15px;
+    padding: 25px 15px;
+  }
+
+  .nosotros h2 {
+    font-size: 1.5rem;
+  }
+
+  .imagenrandom img {
+    max-width: 100%;
+  }
+
+  .imagenrandom span {
+    font-size: 1.2rem;
+  }
+}
+
+
 /* ---------------- BOTONES INTERACTIVOS ---------------- */
 .download:hover,
 .final-banner .download2:hover,
@@ -580,3 +881,4 @@ body {
     text-align: center;
   }
 }
+

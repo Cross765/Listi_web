@@ -18,9 +18,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "sitio")));
 
-// =======================
-// 🔗 Conexión a PostgreSQL
-// =======================
+// Conexión a PostgreSQL
+
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -30,18 +29,16 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// =======================
-// 🔐 Función para hash
-// =======================
+// Función para hash
+
 function hashPassword(password, iterations = 600000) {
   const salt = crypto.randomBytes(16);
   const dk = crypto.pbkdf2Sync(password, salt, iterations, 32, "sha256");
   return `pbkdf2_sha256$${iterations}$${salt.toString("hex")}$${dk.toString("hex")}`;
 }
 
-// =======================
-// ✉️ Configuración Brevo API
-// =======================
+// Configuración Brevo API
+
 const brevoClient = Brevo.ApiClient.instance;
 const apiKey = brevoClient.authentications["api-key"];
 apiKey.apiKey = process.env.BREVO_API_KEY;
@@ -66,9 +63,8 @@ async function enviarCorreoVerificacion(nombre, email, codigo) {
   }
 }
 
-// =======================
-// 📬 Ruta: Registro
-// =======================
+// Ruta: Registro
+
 app.post("/api/register", async (req, res) => {
   const { nombre, email, password } = req.body;
 
@@ -106,9 +102,8 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// =======================
-// 🔍 Ruta: Verificar código
-// =======================
+// Ruta: Verificar código
+
 app.post("/api/verificar", async (req, res) => {
   const { email, codigo } = req.body;
 
@@ -166,13 +161,9 @@ app.post("/api/reenviar-codigo", async (req, res) => {
   }
 });
 
-
-// =======================
-// 🌐 Servir Frontend
-// =======================
+// Servir Frontend
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "sitio", "index.html"));
 });
-
 
 app.listen(PORT, () => console.log(`✅ Servidor corriendo en puerto ${PORT}`));
